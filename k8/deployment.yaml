@@ -16,7 +16,7 @@
                                                 - name: dockerhub-secret
                                             containers:
                                                 - name: paxarisglobal-admin-yatrify-frontend
-                                                    image: "devopspaxarisglobalrepo/paxarisglobal-admin-yatrify-frontend:latest"
+                                                    image: devopspaxarisglobalrepo/paxarisglobal-admin-yatrify-frontend:3937725587b9cca6d6d7b96127ce79bbca1b5d2a
                                                     imagePullPolicy: Always
                                                     ports:
                                                         - containerPort: 80
