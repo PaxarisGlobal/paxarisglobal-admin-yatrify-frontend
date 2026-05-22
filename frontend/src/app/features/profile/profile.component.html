@@ -1,0 +1,172 @@
+<div class="profile-page">
+  <div class="profile-header">
+    <div class="container">
+      <div class="user-hero" *ngIf="profile">
+        <div class="avatar-wrap">
+          <img *ngIf="profile.profilePictureUrl" [src]="profile.profilePictureUrl" alt="avatar">
+          <div class="avatar-placeholder" *ngIf="!profile.profilePictureUrl">
+            {{ profile.firstName.charAt(0) }}{{ profile.lastName?.charAt(0) ?? '' }}
+          </div>
+        </div>
+        <div class="user-info">
+          <h1>{{ profile.firstName }} {{ profile.lastName }}</h1>
+          <p>{{ profile.email }}</p>
+          <span class="verified-badge" *ngIf="profile.isVerified">
+            <mat-icon>verified</mat-icon> Verified
+          </span>
+          <span class="pending-badge" *ngIf="!profile.isVerified">
+            <mat-icon>schedule</mat-icon> Verification Pending
+          </span>
+        </div>
+      </div>
+      <div class="skeleton-header" *ngIf="isLoading">
+        <div class="sk-avatar"></div>
+        <div class="sk-info">
+          <div class="sk-line w200"></div>
+          <div class="sk-line w120"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container profile-body">
+    <div class="tab-nav">
+      <button [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'">
+        <mat-icon>person</mat-icon> Personal Info
+      </button>
+      <button [class.active]="activeTab === 'documents'" (click)="activeTab = 'documents'">
+        <mat-icon>description</mat-icon> Documents
+      </button>
+      <button [class.active]="activeTab === 'preferences'" (click)="activeTab = 'preferences'">
+        <mat-icon>tune</mat-icon> Preferences
+      </button>
+    </div>
+
+    <!-- Personal Info Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'profile'">
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" *ngIf="profileForm">
+        <div class="success-msg" *ngIf="saveSuccess">
+          <mat-icon>check_circle</mat-icon> Profile updated successfully!
+        </div>
+
+        <div class="form-card">
+          <h3>Basic Details</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>First Name *</label>
+              <input formControlName="firstName" class="form-control" placeholder="First name">
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input formControlName="lastName" class="form-control" placeholder="Last name">
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input formControlName="phone" class="form-control" placeholder="10-digit mobile">
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input formControlName="dateOfBirth" type="date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select formControlName="gender" class="form-control">
+                <option value="">Select</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Preferred Language</label>
+              <select formControlName="preferredLanguage" class="form-control">
+                <option *ngFor="let lang of LANGUAGES" [value]="lang">{{ lang }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input formControlName="city" class="form-control" placeholder="Your city">
+            </div>
+            <div class="form-group">
+              <label>State</label>
+              <input formControlName="state" class="form-control" placeholder="Your state">
+            </div>
+            <div class="form-group full">
+              <label>Bio / About You</label>
+              <textarea formControlName="bio" class="form-control" rows="3" placeholder="Tell other travelers about yourself..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="save-actions">
+          <button type="submit" class="save-btn" [disabled]="isSaving">
+            <mat-icon>{{ isSaving ? 'hourglass_empty' : 'save' }}</mat-icon>
+            {{ isSaving ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Documents Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'documents'">
+      <div class="form-card">
+        <h3>Upload Verification Documents</h3>
+        <p class="hint">Upload government-issued ID for account verification. Documents are encrypted and securely stored.</p>
+
+        <div class="upload-area">
+          <div class="doc-type-select">
+            <label>Document Type</label>
+            <select [(ngModel)]="selectedDocType" class="form-control">
+              <option *ngFor="let dt of DOC_TYPES" [value]="dt.value">{{ dt.label }}</option>
+            </select>
+          </div>
+          <label class="file-upload-btn" [class.loading]="isUploadingDoc">
+            <input type="file" (change)="onDocumentFileSelected($event)" accept=".jpg,.jpeg,.png,.pdf" [disabled]="isUploadingDoc">
+            <mat-icon>upload_file</mat-icon>
+            {{ isUploadingDoc ? 'Uploading...' : 'Choose File (JPG, PNG, PDF)' }}
+          </label>
+        </div>
+
+        <div class="documents-list" *ngIf="documents.length">
+          <div class="doc-item" *ngFor="let doc of documents">
+            <div class="doc-icon">
+              <mat-icon>{{ doc.documentType === 'PASSPORT' ? 'book' : 'credit_card' }}</mat-icon>
+            </div>
+            <div class="doc-info">
+              <strong>{{ getDocLabel(doc.documentType) }}</strong>
+              <span>Uploaded {{ doc.createdAt | date:'mediumDate' }}</span>
+            </div>
+            <span class="doc-status" [ngClass]="doc.verificationStatus?.toLowerCase()">
+              {{ doc.verificationStatus }}
+            </span>
+          </div>
+        </div>
+
+        <div class="empty-docs" *ngIf="!documents.length">
+          <mat-icon>description</mat-icon>
+          <p>No documents uploaded yet. Upload your Aadhaar card to get verified.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferences Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'preferences'">
+      <div class="form-card">
+        <h3>Travel Preferences</h3>
+        <p class="hint">Help us personalize your trip recommendations based on your preferences.</p>
+
+        <div class="pref-grid" *ngIf="profile">
+          <div class="pref-item" *ngFor="let cat of ['RELIGIOUS','HONEYMOON','FAMILY','ADVENTURE','WELLNESS','SOLO']">
+            <label class="pref-label">
+              <div class="pref-icon">
+                <mat-icon>{{ cat === 'RELIGIOUS' ? 'temple_buddhist' : cat === 'HONEYMOON' ? 'favorite' : cat === 'FAMILY' ? 'family_restroom' : cat === 'ADVENTURE' ? 'terrain' : cat === 'WELLNESS' ? 'self_improvement' : 'directions_walk' }}</mat-icon>
+              </div>
+              <span>{{ cat | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+        <p class="coming-soon"><mat-icon>info</mat-icon> Advanced preference settings coming soon!</p>
+      </div>
+    </div>
+  </div>
+</div>

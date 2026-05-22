@@ -1,0 +1,31 @@
+<section class="section" style="background: var(--bg-light);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">⭐ Editor's Choice</span>
+      <h2>Featured <span>Trips</span></h2>
+      <p>Hand-picked experiences from our top-rated organizers</p>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div class="trips-grid" *ngIf="isLoading">
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="skeleton-card">
+        <div class="skeleton" style="height: 220px; border-radius: 18px 18px 0 0;"></div>
+        <div style="padding: 18px;">
+          <div class="skeleton" style="height: 14px; width: 40%; margin-bottom: 10px;"></div>
+          <div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div>
+          <div class="skeleton" style="height: 18px; width: 75%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trips-grid" *ngIf="!isLoading">
+      <app-trip-card *ngFor="let trip of trips" [trip]="trip"></app-trip-card>
+    </div>
+
+    <div class="view-all-btn" *ngIf="!isLoading && trips.length > 0">
+      <a routerLink="/trips" class="btn-secondary">
+        View All Featured Trips <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </div>
+  </div>
+</section>

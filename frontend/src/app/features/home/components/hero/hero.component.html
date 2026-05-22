@@ -1,0 +1,124 @@
+<section class="hero">
+  <!-- Background Slider -->
+  <div class="hero__bg">
+    <div *ngFor="let slide of HERO_SLIDES; let i = index"
+         class="hero__slide"
+         [class.active]="currentSlide === i"
+         [style.backgroundImage]="'url(' + slide.backgroundImage + ')'">
+    </div>
+    <div class="hero__overlay"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="hero__content container">
+    <div class="hero__badge animate-fadeInUp">
+      {{ HERO_SLIDES[currentSlide].badge }}
+    </div>
+
+    <h1 class="hero__title animate-fadeInUp"
+        [innerHTML]="HERO_SLIDES[currentSlide].title">
+    </h1>
+
+    <p class="hero__subtitle animate-fadeInUp">
+      {{ HERO_SLIDES[currentSlide].subtitle }}
+    </p>
+
+    <!-- Search Box -->
+    <div class="search-box animate-fadeInUp">
+      <div class="search-form">
+        <div class="search-field">
+          <mat-icon>search</mat-icon>
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="search()"
+            placeholder="Where do you want to go?">
+        </div>
+
+        <div class="search-divider"></div>
+
+        <div class="search-field">
+          <mat-icon>category</mat-icon>
+          <select [(ngModel)]="selectedTripType">
+            <option *ngFor="let type of TRIP_TYPES" [value]="type.value">
+              {{ type.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="search-divider"></div>
+
+        <div class="search-field">
+          <mat-icon>flight_takeoff</mat-icon>
+          <input
+            type="text"
+            [(ngModel)]="departurCity"
+            placeholder="Departure city (optional)">
+        </div>
+
+        <button class="search-btn" (click)="search()">
+          <mat-icon>search</mat-icon>
+          Search Trips
+        </button>
+      </div>
+
+      <!-- Popular Destinations -->
+      <div class="popular-tags">
+        <span class="popular-label">Popular:</span>
+        <button *ngFor="let dest of POPULAR_DESTINATIONS"
+                class="tag"
+                (click)="searchQuery = dest; search()">
+          {{ dest }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Slider Indicators -->
+    <div class="slider-dots">
+      <button *ngFor="let slide of HERO_SLIDES; let i = index"
+              class="dot"
+              [class.active]="currentSlide === i"
+              (click)="goToSlide(i)">
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="hero__stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <mat-icon>verified</mat-icon>
+          <div>
+            <strong>500+</strong>
+            <span>Verified Organizers</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <mat-icon>luggage</mat-icon>
+          <div>
+            <strong>5,000+</strong>
+            <span>Trips Available</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <mat-icon>star</mat-icon>
+          <div>
+            <strong>4.8/5</strong>
+            <span>Average Rating</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <mat-icon>groups</mat-icon>
+          <div>
+            <strong>10,000+</strong>
+            <span>Happy Travelers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

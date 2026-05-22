@@ -1,0 +1,129 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="navbar__container">
+    <!-- Logo -->
+    <div class="navbar__brand" (click)="navigateTo('/')">
+      <div class="brand-logo">
+        <span class="logo-icon">✈</span>
+        <span class="logo-text">Yatrify</span>
+      </div>
+      <span class="brand-tagline">Plan. Explore. Experience.</span>
+    </div>
+
+    <!-- Desktop Nav Links -->
+    <div class="navbar__links">
+      <a class="nav-link" (click)="navigateTo('/trips')">
+        <mat-icon>explore</mat-icon> Explore Trips
+      </a>
+      <a class="nav-link" (click)="navigateTo('/trips?type=RELIGIOUS')">
+        <mat-icon>temple_hindu</mat-icon> Religious
+      </a>
+      <a class="nav-link" (click)="navigateTo('/trips?type=HONEYMOON')">
+        <mat-icon>favorite</mat-icon> Honeymoon
+      </a>
+      <a class="nav-link" (click)="navigateTo('/trips?type=FAMILY')">
+        <mat-icon>family_restroom</mat-icon> Family
+      </a>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="navbar__actions">
+      <!-- Become Organizer (for non-organizers) -->
+      <button *ngIf="isAuthenticated && !isOrganizer"
+              class="btn-outline-primary"
+              (click)="navigateTo('/organizer/register')">
+        <mat-icon>business_center</mat-icon>
+        Become Organizer
+      </button>
+
+      <!-- Not Logged In -->
+      <ng-container *ngIf="!isAuthenticated">
+        <button class="btn-ghost-nav" (click)="navigateTo('/auth/login')">Login</button>
+        <button class="btn-primary-nav" (click)="navigateTo('/auth/register')">Sign Up Free</button>
+      </ng-container>
+
+      <!-- Logged In -->
+      <ng-container *ngIf="isAuthenticated">
+        <!-- Wishlist -->
+        <button class="icon-btn" (click)="navigateTo('/wishlist')" matTooltip="My Wishlist">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+
+        <!-- Notifications -->
+        <button class="icon-btn" matTooltip="Notifications">
+          <mat-icon>notifications_none</mat-icon>
+          <span class="notification-badge" *ngIf="unreadNotifications > 0">{{ unreadNotifications }}</span>
+        </button>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-menu" (click)="isProfileMenuOpen = !isProfileMenuOpen">
+          <div class="avatar">
+            <img *ngIf="userProfile?.profilePictureUrl" [src]="userProfile?.profilePictureUrl" [alt]="userProfile?.fullName">
+            <span *ngIf="!userProfile?.profilePictureUrl">{{ userProfile?.firstName?.charAt(0) || 'U' }}</span>
+          </div>
+          <mat-icon class="chevron" [class.rotated]="isProfileMenuOpen">expand_more</mat-icon>
+
+          <!-- Dropdown -->
+          <div class="dropdown-menu" *ngIf="isProfileMenuOpen">
+            <div class="dropdown-header">
+              <strong>{{ userProfile?.fullName || 'Welcome!' }}</strong>
+              <span>{{ userProfile?.email }}</span>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="navigateTo('/dashboard')">
+              <mat-icon>dashboard</mat-icon> My Dashboard
+            </a>
+            <a class="dropdown-item" (click)="navigateTo('/profile')">
+              <mat-icon>person</mat-icon> My Profile
+            </a>
+            <a class="dropdown-item" (click)="navigateTo('/dashboard/bookings')">
+              <mat-icon>confirmation_number</mat-icon> My Bookings
+            </a>
+            <a class="dropdown-item" (click)="navigateTo('/wishlist')">
+              <mat-icon>favorite_border</mat-icon> Wishlist
+            </a>
+            <ng-container *ngIf="isOrganizer">
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item organizer-link" (click)="navigateTo('/organizer/dashboard')">
+                <mat-icon>business_center</mat-icon> Organizer Dashboard
+              </a>
+              <a class="dropdown-item" (click)="navigateTo('/organizer/trips')">
+                <mat-icon>add_circle_outline</mat-icon> Manage Trips
+              </a>
+            </ng-container>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-error" (click)="logout()">
+              <mat-icon>logout</mat-icon> Sign Out
+            </a>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-btn" (click)="isMobileMenuOpen = !isMobileMenuOpen">
+        <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+    <a class="mobile-nav-link" (click)="navigateTo('/trips')">Explore Trips</a>
+    <a class="mobile-nav-link" (click)="navigateTo('/trips?type=RELIGIOUS')">Religious Tours</a>
+    <a class="mobile-nav-link" (click)="navigateTo('/trips?type=HONEYMOON')">Honeymoon</a>
+    <a class="mobile-nav-link" (click)="navigateTo('/trips?type=FAMILY')">Family Trips</a>
+    <a class="mobile-nav-link" (click)="navigateTo('/trips?type=ADVENTURE')">Adventure</a>
+    <div class="mobile-divider"></div>
+    <ng-container *ngIf="!isAuthenticated">
+      <a class="mobile-nav-link" (click)="navigateTo('/auth/login')">Login</a>
+      <a class="mobile-nav-link primary" (click)="navigateTo('/auth/register')">Sign Up Free</a>
+    </ng-container>
+    <ng-container *ngIf="isAuthenticated">
+      <a class="mobile-nav-link" (click)="navigateTo('/dashboard')">Dashboard</a>
+      <a class="mobile-nav-link" *ngIf="isOrganizer" (click)="navigateTo('/organizer/dashboard')">Organizer Dashboard</a>
+      <a class="mobile-nav-link" (click)="logout()">Sign Out</a>
+    </ng-container>
+  </div>
+</nav>
+
+<!-- Backdrop for dropdown -->
+<div class="backdrop" *ngIf="isProfileMenuOpen" (click)="isProfileMenuOpen = false"></div>

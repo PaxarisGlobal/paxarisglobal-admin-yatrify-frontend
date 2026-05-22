@@ -1,0 +1,30 @@
+<section class="section" style="background: var(--bg-light);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">🔥 Trending Now</span>
+      <h2>Most <span>Popular</span> This Month</h2>
+      <p>Join thousands of travelers on these trending experiences</p>
+    </div>
+
+    <div class="trips-grid" *ngIf="!isLoading">
+      <app-trip-card *ngFor="let trip of trips" [trip]="trip"></app-trip-card>
+    </div>
+
+    <div class="trips-grid" *ngIf="isLoading">
+      <div *ngFor="let i of [1,2,3,4]" class="skeleton-card">
+        <div class="skeleton" style="height: 220px; border-radius: 18px 18px 0 0;"></div>
+        <div style="padding: 18px;">
+          <div class="skeleton" style="height: 16px; width: 40%; margin-bottom: 10px;"></div>
+          <div class="skeleton" style="height: 20px; margin-bottom: 8px;"></div>
+          <div class="skeleton" style="height: 16px; width: 60%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-all" *ngIf="!isLoading">
+      <a routerLink="/trips" class="view-all-link">
+        Explore All Trips <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </div>
+  </div>
+</section>

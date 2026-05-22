@@ -1,0 +1,137 @@
+<div class="trips-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>Explore <span>Trips</span></h1>
+      <p>Find your perfect journey from {{ pageData?.totalElements || '0' }} curated trips</p>
+    </div>
+  </div>
+
+  <div class="container page-body">
+    <div class="trips-layout">
+      <!-- Sidebar Filters -->
+      <aside class="filters-sidebar">
+        <div class="filters-header">
+          <h3><mat-icon>tune</mat-icon> Filters</h3>
+          <button *ngIf="hasActiveFilters" class="clear-btn" (click)="clearFilters()">
+            Clear All
+          </button>
+        </div>
+
+        <form [formGroup]="filterForm">
+          <!-- Search -->
+          <div class="filter-group">
+            <label>Search</label>
+            <div class="search-input">
+              <mat-icon>search</mat-icon>
+              <input type="text" formControlName="keyword" placeholder="Destination, trip name...">
+            </div>
+          </div>
+
+          <!-- Trip Type -->
+          <div class="filter-group">
+            <label>Trip Type</label>
+            <div class="type-chips">
+              <button *ngFor="let type of TRIP_TYPE_OPTIONS"
+                      type="button"
+                      class="chip"
+                      [class.active]="filterForm.get('tripType')?.value === type.value"
+                      (click)="filterForm.patchValue({tripType: type.value})">
+                {{ type.label }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Departure City -->
+          <div class="filter-group">
+            <label>Departure City</label>
+            <div class="search-input">
+              <mat-icon>flight_takeoff</mat-icon>
+              <input type="text" formControlName="departureCity" placeholder="e.g. Mumbai, Delhi...">
+            </div>
+          </div>
+
+          <!-- Price Range -->
+          <div class="filter-group">
+            <label>Budget (per person)</label>
+            <div class="price-inputs">
+              <input type="number" formControlName="minPrice" placeholder="Min ₹">
+              <span>to</span>
+              <input type="number" formControlName="maxPrice" placeholder="Max ₹">
+            </div>
+          </div>
+
+          <!-- Seats Required -->
+          <div class="filter-group">
+            <label>People</label>
+            <div class="counter">
+              <button type="button" (click)="filterForm.patchValue({seats: Math.max(1, filterForm.get('seats')!.value - 1)})">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span>{{ filterForm.get('seats')?.value || 1 }}</span>
+              <button type="button" (click)="filterForm.patchValue({seats: (filterForm.get('seats')!.value || 1) + 1})">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="trips-main">
+        <!-- Toolbar -->
+        <div class="trips-toolbar">
+          <div class="result-count">
+            <strong>{{ pageData?.totalElements || 0 }}</strong> trips found
+            <span *ngIf="filterForm.get('tripType')?.value" class="active-filter">
+              {{ filterForm.get('tripType')?.value | titlecase }}
+            </span>
+          </div>
+
+          <div class="sort-section">
+            <mat-icon>sort</mat-icon>
+            <select formControlName="sortBy" [formGroup]="filterForm">
+              <option *ngFor="let opt of SORT_OPTIONS" [value]="opt.value">{{ opt.label }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-grid" *ngIf="isLoading">
+          <div *ngFor="let i of [1,2,3,4,5,6,7,8,9]" class="skeleton-card">
+            <div class="skeleton" style="height: 200px; border-radius: 14px 14px 0 0;"></div>
+            <div style="padding: 16px;">
+              <div class="skeleton" style="height: 12px; width: 40%; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 16px; margin-bottom: 6px;"></div>
+              <div class="skeleton" style="height: 16px; width: 70%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trips Grid -->
+        <div class="trips-grid" *ngIf="!isLoading && trips.length > 0">
+          <app-trip-card *ngFor="let trip of trips" [trip]="trip"></app-trip-card>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!isLoading && trips.length === 0">
+          <mat-icon>search_off</mat-icon>
+          <h3>No trips found</h3>
+          <p>Try adjusting your filters or search for something different</p>
+          <button class="btn-primary" (click)="clearFilters()">Clear Filters</button>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="pageData && pageData.totalPages > 1">
+          <button [disabled]="currentPage === 0" (click)="onPageChange(currentPage - 1)">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <span class="page-info">{{ currentPage + 1 }} of {{ pageData.totalPages }}</span>
+          <button [disabled]="!pageData.hasNext" (click)="onPageChange(currentPage + 1)">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

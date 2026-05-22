@@ -1,0 +1,155 @@
+.create-trip-page { padding-top: 72px; background: var(--bg-light); min-height: 100vh; }
+
+.page-header {
+  background: var(--secondary);
+  padding: 28px 0;
+
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.12); color: white; border: none;
+    border-radius: 8px; padding: 8px 14px; font-family: var(--font-primary);
+    font-size: 13px; cursor: pointer; margin-bottom: 14px;
+    mat-icon { font-size: 16px; }
+    &:hover { background: rgba(255,255,255,0.22); }
+  }
+
+  h1 { font-size: 26px; font-weight: 800; color: white; }
+  p { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+}
+
+.page-body { padding: 28px 24px 60px; }
+
+.step-indicator {
+  display: flex; align-items: center; gap: 0;
+  background: white; border-radius: 16px;
+  padding: 20px 28px; margin-bottom: 28px;
+  border: 1px solid var(--border-color);
+
+  .step {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 600; color: var(--text-secondary);
+    flex: 1;
+    span {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    &.active { color: var(--primary); span { border-color: var(--primary); color: var(--primary); } }
+    &.done { color: #10b981; span { background: #10b981; border-color: #10b981; color: white; } }
+  }
+
+  .step-line { flex: 0 0 40px; height: 2px; background: var(--border-color); margin: 0 8px; }
+}
+
+.form-container {
+  background: white; border-radius: 20px;
+  padding: 32px; border: 1px solid var(--border-color);
+}
+
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 7px; }
+  &.full { grid-column: 1 / -1; }
+}
+
+.form-control {
+  width: 100%; padding: 12px 14px; border: 1.5px solid var(--border-color); border-radius: 10px;
+  font-family: var(--font-primary); font-size: 14px; color: var(--text-primary); background: white;
+  box-sizing: border-box; transition: all 0.2s;
+  &:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-bg); }
+  &::placeholder { color: var(--text-light); }
+}
+
+textarea.form-control { resize: vertical; }
+
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 12px; margin-top: 28px; padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.next-btn {
+  display: flex; align-items: center; gap: 8px; padding: 12px 24px;
+  background: var(--gradient-primary); color: white; border: none;
+  border-radius: 12px; font-family: var(--font-primary); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.3s; box-shadow: var(--shadow-primary);
+  mat-icon { font-size: 18px; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:not(:disabled):hover { transform: translateY(-2px); }
+}
+
+.back-btn-form {
+  display: flex; align-items: center; gap: 8px; padding: 12px 20px;
+  background: white; color: var(--text-secondary); border: 1.5px solid var(--border-color);
+  border-radius: 12px; font-family: var(--font-primary); font-size: 14px; font-weight: 600; cursor: pointer;
+  mat-icon { font-size: 18px; }
+  &:hover { border-color: var(--primary); color: var(--primary); }
+}
+
+.submit-btn {
+  display: flex; align-items: center; gap: 8px; padding: 12px 24px;
+  background: var(--gradient-primary); color: white; border: none;
+  border-radius: 12px; font-family: var(--font-primary); font-size: 14px; font-weight: 600;
+  cursor: pointer; box-shadow: var(--shadow-primary);
+  mat-icon { font-size: 18px; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:hover:not(:disabled) { transform: translateY(-2px); }
+}
+
+.ai-generate-section {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: linear-gradient(135deg, #e8f4fd, #f0f7ee); border: 1.5px solid var(--primary);
+  border-radius: 14px; padding: 18px 24px; margin-bottom: 24px; flex-wrap: wrap;
+
+  .ai-info {
+    display: flex; align-items: center; gap: 14px;
+    mat-icon { font-size: 30px; color: var(--primary); }
+    strong { font-size: 15px; font-weight: 700; }
+    p { font-size: 13px; color: var(--text-secondary); margin: 0; }
+  }
+
+  .ai-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+    background: var(--gradient-primary); color: white; border: none;
+    border-radius: 10px; font-family: var(--font-primary); font-size: 14px;
+    font-weight: 600; cursor: pointer; box-shadow: var(--shadow-primary);
+    mat-icon { font-size: 18px; }
+    &:disabled { opacity: 0.6; cursor: wait; }
+  }
+}
+
+.day-form {
+  border: 1.5px solid var(--border-color); border-radius: 14px;
+  padding: 20px; margin-bottom: 16px; transition: all 0.2s;
+  &:hover { border-color: var(--primary); }
+}
+
+.day-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+
+  .day-badge {
+    background: var(--primary); color: white; padding: 4px 12px;
+    border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap;
+  }
+
+  .day-title-input {
+    flex: 1; padding: 10px 14px; border: 1.5px solid var(--border-color);
+    border-radius: 10px; font-family: var(--font-primary); font-size: 14px;
+    font-weight: 600; background: white;
+    &:focus { outline: none; border-color: var(--primary); }
+  }
+}
+
+.add-day-btn {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 14px; background: var(--bg-light); border: 2px dashed var(--border-color);
+  border-radius: 12px; font-family: var(--font-primary); font-size: 14px;
+  font-weight: 600; color: var(--text-secondary); cursor: pointer; justify-content: center;
+  margin-bottom: 24px; transition: all 0.2s;
+  mat-icon { font-size: 20px; }
+  &:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-bg); }
+}

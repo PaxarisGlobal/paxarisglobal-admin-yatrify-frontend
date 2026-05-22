@@ -1,0 +1,199 @@
+<div class="create-trip-page">
+  <div class="page-header">
+    <div class="container">
+      <button class="back-btn" (click)="router.navigate(['/organizer/dashboard'])">
+        <mat-icon>arrow_back</mat-icon> Back to Dashboard
+      </button>
+      <h1>Create New Trip</h1>
+      <p>Fill in the details below to create your trip listing</p>
+    </div>
+  </div>
+
+  <div class="container page-body">
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">
+        <span>1</span> Basic Info
+      </div>
+      <div class="step-line"></div>
+      <div class="step" [class.active]="currentStep >= 2" [class.done]="currentStep > 2">
+        <span>2</span> Pricing & Inclusions
+      </div>
+      <div class="step-line"></div>
+      <div class="step" [class.active]="currentStep >= 3">
+        <span>3</span> Itinerary
+      </div>
+    </div>
+
+    <div class="form-container">
+      <!-- Step 1: Basic Info -->
+      <form [formGroup]="basicForm" *ngIf="currentStep === 1">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Trip Title *</label>
+            <input formControlName="title" type="text" class="form-control" placeholder="e.g., Char Dham Yatra 2025 - 12 Days Complete Package">
+          </div>
+
+          <div class="form-group">
+            <label>Trip Type *</label>
+            <select formControlName="tripType" class="form-control">
+              <option value="">Select trip type</option>
+              <option *ngFor="let t of TRIP_TYPES" [value]="t.value">{{ t.label }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Destinations * (comma separated)</label>
+            <input formControlName="destinations" type="text" class="form-control" placeholder="Badrinath, Kedarnath, Gangotri">
+          </div>
+
+          <div class="form-group full">
+            <label>Description *</label>
+            <textarea formControlName="description" class="form-control" rows="4" placeholder="Describe your trip in detail..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Duration (Days) *</label>
+            <input formControlName="durationDays" type="number" class="form-control" min="1">
+          </div>
+
+          <div class="form-group">
+            <label>Duration (Nights) *</label>
+            <input formControlName="durationNights" type="number" class="form-control" min="0">
+          </div>
+
+          <div class="form-group">
+            <label>Start Date *</label>
+            <input formControlName="startDate" type="date" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>End Date *</label>
+            <input formControlName="endDate" type="date" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>Registration Deadline *</label>
+            <input formControlName="registrationDeadline" type="datetime-local" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>Departure City *</label>
+            <input formControlName="departureCity" type="text" class="form-control" placeholder="Mumbai">
+          </div>
+
+          <div class="form-group">
+            <label>Total Seats *</label>
+            <input formControlName="totalSeats" type="number" class="form-control" min="1" max="500">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="next-btn" (click)="currentStep = 2" [disabled]="basicForm.invalid">
+            Next: Pricing <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </form>
+
+      <!-- Step 2: Pricing -->
+      <form [formGroup]="priceForm" *ngIf="currentStep === 2">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Price per Person (₹) *</label>
+            <input formControlName="pricePerPerson" type="number" class="form-control" placeholder="15000">
+          </div>
+
+          <div class="form-group">
+            <label>Base Price (₹) *</label>
+            <input formControlName="basePrice" type="number" class="form-control" placeholder="14000">
+          </div>
+
+          <div class="form-group">
+            <label>Child Price (₹)</label>
+            <input formControlName="childPrice" type="number" class="form-control" placeholder="9000">
+          </div>
+
+          <div class="form-group">
+            <label>Discount (%)</label>
+            <input formControlName="discountPercentage" type="number" class="form-control" min="0" max="100">
+          </div>
+
+          <div class="form-group full">
+            <label>Inclusions (one per line)</label>
+            <textarea formControlName="inclusions" class="form-control" rows="5" placeholder="All accommodation in 3-star hotels&#10;All meals (breakfast, lunch, dinner)&#10;AC transport throughout&#10;Expert tour guide"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label>Exclusions (one per line)</label>
+            <textarea formControlName="exclusions" class="form-control" rows="4" placeholder="Personal expenses&#10;Travel insurance&#10;Airfare"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label>Trip Highlights (one per line)</label>
+            <textarea formControlName="highlights" class="form-control" rows="4" placeholder="Visit all 4 Char Dhams&#10;Expert spiritual guide&#10;Traditional meals"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label>Cancellation Policy</label>
+            <textarea formControlName="cancellationPolicy" class="form-control" rows="3" placeholder="Free cancellation up to 30 days before..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="back-btn-form" (click)="currentStep = 1">
+            <mat-icon>arrow_back</mat-icon> Back
+          </button>
+          <button type="button" class="next-btn" (click)="currentStep = 3" [disabled]="priceForm.invalid">
+            Next: Itinerary <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </form>
+
+      <!-- Step 3: Itinerary -->
+      <div *ngIf="currentStep === 3">
+        <div class="ai-generate-section">
+          <div class="ai-info">
+            <mat-icon>smart_toy</mat-icon>
+            <div>
+              <strong>Generate with AI</strong>
+              <p>Let Yatri Pro AI create a detailed day-by-day itinerary for your trip</p>
+            </div>
+          </div>
+          <button class="ai-btn" (click)="generateWithAI()" [disabled]="isGeneratingAI">
+            <mat-icon>auto_awesome</mat-icon>
+            {{ isGeneratingAI ? 'Generating...' : 'Generate Itinerary' }}
+          </button>
+        </div>
+
+        <form [formGroup]="itineraryForm">
+          <div formArrayName="days">
+            <div *ngFor="let day of daysArray.controls; let i = index"
+                 [formGroupName]="i"
+                 class="day-form">
+              <div class="day-header">
+                <span class="day-badge">Day {{ i + 1 }}</span>
+                <input formControlName="title" type="text" placeholder="Day title" class="day-title-input">
+              </div>
+              <textarea formControlName="description" placeholder="Describe this day..." class="form-control" rows="3"></textarea>
+              <textarea formControlName="activities" placeholder="Activities (one per line)..." class="form-control" rows="2" style="margin-top: 8px;"></textarea>
+            </div>
+          </div>
+
+          <button type="button" class="add-day-btn" (click)="addDay()">
+            <mat-icon>add</mat-icon> Add Day
+          </button>
+        </form>
+
+        <div class="form-actions">
+          <button type="button" class="back-btn-form" (click)="currentStep = 2">
+            <mat-icon>arrow_back</mat-icon> Back
+          </button>
+          <button type="button" class="submit-btn" (click)="submitTrip()" [disabled]="isSubmitting">
+            <mat-icon>save</mat-icon>
+            {{ isSubmitting ? 'Creating...' : 'Create Trip (Draft)' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

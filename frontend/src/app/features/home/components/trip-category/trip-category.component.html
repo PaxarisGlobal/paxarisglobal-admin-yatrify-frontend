@@ -1,0 +1,27 @@
+<section class="categories section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Explore by Category</span>
+      <h2>What Kind of Trip Are You <span>Planning?</span></h2>
+      <p>Find the perfect trip for every occasion, from spiritual pilgrimages to romantic getaways</p>
+    </div>
+
+    <div class="categories__grid">
+      <div *ngFor="let category of CATEGORIES"
+           class="category-card"
+           (click)="navigate(category.type)">
+        <div class="category-card__image">
+          <img [src]="category.image" [alt]="category.label" loading="lazy">
+          <div class="category-card__overlay">
+            <span class="category-emoji">{{ category.emoji }}</span>
+          </div>
+        </div>
+        <div class="category-card__content">
+          <h3>{{ category.label }}</h3>
+          <p>{{ category.description }}</p>
+          <span class="trip-count">{{ category.count }}+ trips</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

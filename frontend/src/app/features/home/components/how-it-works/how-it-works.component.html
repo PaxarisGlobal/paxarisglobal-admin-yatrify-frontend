@@ -1,0 +1,58 @@
+<section class="how-it-works section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Simple Process</span>
+      <h2>How <span>Yatrify</span> Works</h2>
+      <p>Get started in minutes — whether you're planning a trip or organizing one</p>
+    </div>
+
+    <!-- Tab Toggle -->
+    <div class="tab-toggle">
+      <button [class.active]="activeTab === 'traveler'" (click)="activeTab = 'traveler'">
+        <mat-icon>person</mat-icon> For Travelers
+      </button>
+      <button [class.active]="activeTab === 'organizer'" (click)="activeTab = 'organizer'">
+        <mat-icon>business_center</mat-icon> For Organizers
+      </button>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps" *ngIf="activeTab === 'traveler'">
+      <div *ngFor="let step of TRAVELER_STEPS; let i = index"
+           class="step-card animate-fadeInUp"
+           [style.animationDelay]="(i * 0.1) + 's'">
+        <div class="step-number">{{ step.step }}</div>
+        <div class="step-icon" [style.background]="step.color + '20'">
+          <mat-icon [style.color]="step.color">{{ step.icon }}</mat-icon>
+        </div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+        <div class="step-connector" *ngIf="i < TRAVELER_STEPS.length - 1">
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps" *ngIf="activeTab === 'organizer'">
+      <div *ngFor="let step of ORGANIZER_STEPS; let i = index"
+           class="step-card animate-fadeInUp"
+           [style.animationDelay]="(i * 0.1) + 's'">
+        <div class="step-number">{{ step.step }}</div>
+        <div class="step-icon" [style.background]="step.color + '20'">
+          <mat-icon [style.color]="step.color">{{ step.icon }}</mat-icon>
+        </div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+      </div>
+    </div>
+
+    <div class="cta-footer">
+      <a *ngIf="activeTab === 'traveler'" routerLink="/trips" class="btn-primary">
+        <mat-icon>explore</mat-icon> Explore Trips Now
+      </a>
+      <a *ngIf="activeTab === 'organizer'" routerLink="/organizer/register" class="btn-primary">
+        <mat-icon>business_center</mat-icon> Become an Organizer
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,118 @@
+.confirmation-page {
+  padding-top: 72px;
+  background: var(--bg-light);
+  min-height: 100vh;
+
+  .container { padding: 48px 24px; max-width: 800px; }
+}
+
+.success-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: #ecfdf5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+
+    mat-icon { font-size: 48px; color: #10b981; }
+  }
+
+  h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+  p { color: var(--text-secondary); font-size: 16px; margin-bottom: 12px; }
+
+  .booking-ref {
+    background: var(--primary-bg);
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--primary);
+    strong { font-size: 16px; font-weight: 800; letter-spacing: 1px; }
+  }
+}
+
+.confirmation-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 28px;
+
+  .trip-info {
+    display: flex;
+    gap: 18px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+
+    img { width: 100px; height: 80px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+    h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .trip-details { display: flex; flex-direction: column; gap: 6px;
+      span { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-secondary);
+        mat-icon { font-size: 16px; color: var(--primary); } } }
+  }
+
+  .payment-summary {
+    h4 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .amount-row { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 12px;
+      .amount { font-size: 24px; color: var(--primary); font-weight: 800; } }
+    .status-badge.confirmed { display: inline-flex; align-items: center; gap: 6px; background: #ecfdf5; color: #10b981;
+      padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+      mat-icon { font-size: 16px; } }
+  }
+}
+
+.next-steps {
+  h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    @media (max-width: 600px) { grid-template-columns: 1fr; } }
+  .step-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--border-color);
+    mat-icon { font-size: 32px; color: var(--primary); margin-bottom: 12px; display: block; }
+    h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; } }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 28px;
+  flex-wrap: wrap;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    mat-icon { font-size: 20px; }
+  }
+
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    box-shadow: var(--shadow-primary);
+    &:hover { transform: translateY(-2px); }
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-color);
+    &:hover { border-color: var(--primary); color: var(--primary); }
+  }
+}

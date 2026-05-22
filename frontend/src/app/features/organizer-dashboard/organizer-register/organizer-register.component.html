@@ -1,0 +1,158 @@
+<div class="register-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <mat-icon>business_center</mat-icon>
+        </div>
+        <h1>Become a Yatrify Organizer</h1>
+        <p>Share your passion for travel. Create and sell unforgettable trip experiences to thousands of travelers.</p>
+        <div class="perks">
+          <div class="perk"><mat-icon>verified</mat-icon> Verified badge</div>
+          <div class="perk"><mat-icon>trending_up</mat-icon> Grow your business</div>
+          <div class="perk"><mat-icon>smart_toy</mat-icon> AI trip planner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container form-body">
+    <!-- Success State -->
+    <div class="success-card" *ngIf="submitted">
+      <mat-icon>check_circle</mat-icon>
+      <h2>You're an Organizer!</h2>
+      <p>Your profile was saved and the organizer role was assigned in Paxaris. Redirecting to your dashboard…</p>
+      <button class="home-btn" type="button" (click)="router.navigate(['/organizer/dashboard'])">
+        <mat-icon>dashboard</mat-icon> Go to Organizer Dashboard
+      </button>
+    </div>
+
+    <!-- Registration Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!submitted">
+      <div class="error-banner" *ngIf="errorMsg">
+        <mat-icon>error_outline</mat-icon> {{ errorMsg }}
+      </div>
+
+      <!-- Business Info -->
+      <div class="form-section">
+        <h3><mat-icon>store</mat-icon> Business Information</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Business/Agency Name *</label>
+            <input formControlName="businessName" class="form-control" placeholder="e.g., Shri Tours & Travels">
+          </div>
+          <div class="form-group">
+            <label>Display Name *</label>
+            <input formControlName="displayName" class="form-control" placeholder="How you appear to travelers">
+          </div>
+          <div class="form-group">
+            <label>Business Email *</label>
+            <input formControlName="businessEmail" type="email" class="form-control" placeholder="contact@yourbusiness.com">
+          </div>
+          <div class="form-group">
+            <label>Business Phone *</label>
+            <input formControlName="businessPhone" class="form-control" placeholder="10-digit mobile number">
+          </div>
+          <div class="form-group">
+            <label>Website</label>
+            <input formControlName="website" class="form-control" placeholder="https://yourwebsite.com">
+          </div>
+          <div class="form-group">
+            <label>Years of Experience *</label>
+            <input formControlName="yearsOfExperience" type="number" class="form-control" min="0">
+          </div>
+          <div class="form-group full">
+            <label>About Your Business *</label>
+            <textarea formControlName="businessDescription" class="form-control" rows="4"
+              placeholder="Tell travelers about your experience, services, and what makes your trips special..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specializations -->
+      <div class="form-section">
+        <h3><mat-icon>category</mat-icon> Specializations</h3>
+        <p class="section-hint">Select all trip categories you offer</p>
+        <div class="spec-chips">
+          <button type="button" *ngFor="let spec of SPECIALIZATIONS"
+                  class="spec-chip" [class.selected]="isSelectedSpec(spec)"
+                  (click)="toggleSpecialization(spec)">
+            {{ spec }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Legal Details -->
+      <div class="form-section">
+        <h3><mat-icon>gavel</mat-icon> Legal & Tax Details</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Travel License Number</label>
+            <input formControlName="licenseNumber" class="form-control" placeholder="Travel Agency License">
+          </div>
+          <div class="form-group">
+            <label>GST Number</label>
+            <input formControlName="gstNumber" class="form-control" placeholder="GST Registration Number">
+          </div>
+          <div class="form-group">
+            <label>PAN Number</label>
+            <input formControlName="panNumber" class="form-control" placeholder="ABCDE1234F">
+          </div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="form-section" formGroupName="address">
+        <h3><mat-icon>location_on</mat-icon> Business Address</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Street Address</label>
+            <input formControlName="street" class="form-control" placeholder="Street, building, area">
+          </div>
+          <div class="form-group">
+            <label>City *</label>
+            <input formControlName="city" class="form-control" placeholder="Mumbai">
+          </div>
+          <div class="form-group">
+            <label>State *</label>
+            <input formControlName="state" class="form-control" placeholder="Maharashtra">
+          </div>
+          <div class="form-group">
+            <label>Pin Code</label>
+            <input formControlName="pinCode" class="form-control" placeholder="400001">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bank Details -->
+      <div class="form-section">
+        <h3><mat-icon>account_balance</mat-icon> Bank Details (for payouts)</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Bank Account Number</label>
+            <input formControlName="bankAccountNumber" class="form-control" placeholder="Account number">
+          </div>
+          <div class="form-group">
+            <label>IFSC Code</label>
+            <input formControlName="bankIfscCode" class="form-control" placeholder="SBIN0000123">
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="form-section terms-section">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="agreeToTerms">
+          <span>I agree to Yatrify's <a href="#">Terms of Service</a>, <a href="#">Organizer Guidelines</a>, and <a href="#">Privacy Policy</a>. I confirm all information provided is accurate.</span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="isSubmitting || form.invalid">
+          <mat-icon>{{ isSubmitting ? 'hourglass_empty' : 'send' }}</mat-icon>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

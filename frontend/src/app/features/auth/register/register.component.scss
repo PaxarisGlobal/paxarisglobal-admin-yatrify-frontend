@@ -1,0 +1,19 @@
+@use '../login/login.component.scss';
+
+.name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.terms-check {
+  margin-bottom: 18px;
+
+  p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+
+    a { color: var(--primary); font-weight: 500; }
+  }
+}

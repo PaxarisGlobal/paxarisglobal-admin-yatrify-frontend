@@ -1,0 +1,61 @@
+<div class="auth-page">
+  <div class="auth-visual">
+    <div class="visual-overlay"></div>
+    <div class="visual-content">
+      <div class="brand-logo">
+        <span>✈</span> Yatrify
+      </div>
+      <h2>Your Journey Begins Here</h2>
+      <p>Join millions of travelers discovering India's most beautiful destinations</p>
+      <div class="features">
+        <div class="feature"><mat-icon>verified</mat-icon> Verified Organizers</div>
+        <div class="feature"><mat-icon>security</mat-icon> Secure Payments</div>
+        <div class="feature"><mat-icon>support_agent</mat-icon> 24/7 Support</div>
+        <div class="feature"><mat-icon>smart_toy</mat-icon> AI Trip Assistant</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-section">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in to continue planning your dream trip</p>
+
+      <div class="info-note">
+        <mat-icon>info</mat-icon>
+        <span>In production, login is handled by the Yatrify Identity Platform. This is a demo interface.</span>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="form-group">
+          <label>Email Address</label>
+          <div class="input-wrap">
+            <mat-icon>email</mat-icon>
+            <input type="email" formControlName="email" placeholder="Enter your email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <mat-icon>lock</mat-icon>
+            <input type="password" formControlName="password" placeholder="Enter your password">
+          </div>
+        </div>
+
+        <div class="error-msg" *ngIf="errorMessage">
+          <mat-icon>error</mat-icon> {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Sign In</span>
+          <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+        </button>
+      </form>
+
+      <p class="switch-auth">
+        Don't have an account? <a routerLink="/auth/register">Create one free</a>
+      </p>
+    </div>
+  </div>
+</div>

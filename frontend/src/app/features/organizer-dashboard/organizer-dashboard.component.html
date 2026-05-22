@@ -1,0 +1,120 @@
+<div class="organizer-dashboard">
+  <div class="dashboard-header">
+    <div class="container">
+      <div class="header-left">
+        <div class="org-avatar">
+          <img *ngIf="organizerProfile?.logoUrl" [src]="organizerProfile.logoUrl" alt="">
+          <mat-icon *ngIf="!organizerProfile?.logoUrl">business</mat-icon>
+        </div>
+        <div>
+          <div class="verification-badge" [class.verified]="organizerProfile?.isVerified">
+            <mat-icon>{{ organizerProfile?.isVerified ? 'verified' : 'pending' }}</mat-icon>
+            {{ organizerProfile?.isVerified ? 'Verified Organizer' : organizerProfile?.verificationStatus || 'Pending Verification' }}
+          </div>
+          <h1>{{ organizerProfile?.organizationName || 'Organizer Dashboard' }}</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button (click)="router.navigate(['/organizer/create-trip'])" class="create-trip-btn">
+          <mat-icon>add</mat-icon> Create New Trip
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container dashboard-body">
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <mat-icon>luggage</mat-icon>
+        <div>
+          <strong>{{ trips.length }}</strong>
+          <span>Total Trips</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon>public</mat-icon>
+        <div>
+          <strong>{{ trips | countByStatus:'PUBLISHED' }}</strong>
+          <span>Active Trips</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon>confirmation_number</mat-icon>
+        <div>
+          <strong>{{ organizerProfile?.totalTripsConducted || 0 }}</strong>
+          <span>Trips Completed</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon>star</mat-icon>
+        <div>
+          <strong>{{ organizerProfile?.rating || '—' }}</strong>
+          <span>Rating</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trips Table -->
+    <div class="trips-section">
+      <div class="section-header">
+        <h2>My Trips</h2>
+        <button (click)="router.navigate(['/organizer/create-trip'])" class="add-btn">
+          <mat-icon>add</mat-icon> New Trip
+        </button>
+      </div>
+
+      <div class="trips-table" *ngIf="!isLoading">
+        <div *ngFor="let trip of trips" class="trip-row">
+          <div class="trip-image">
+            <img [src]="trip.coverImageUrl" [alt]="trip.title">
+          </div>
+          <div class="trip-info">
+            <h4>{{ trip.title }}</h4>
+            <div class="trip-meta">
+              <span>{{ trip.startDate | date:'dd MMM yyyy' }}</span>
+              <span>{{ trip.durationDays }}D/{{ trip.durationNights }}N</span>
+              <span>₹{{ trip.pricePerPerson | number:'1.0-0' }}/person</span>
+            </div>
+          </div>
+          <div class="trip-seats">
+            <strong>{{ trip.availableSeats }}/{{ trip.totalSeats }}</strong>
+            <span>seats left</span>
+          </div>
+          <div class="trip-status" [class]="trip.status.toLowerCase()">{{ trip.status }}</div>
+          <div class="trip-actions">
+            <button *ngIf="trip.status === 'DRAFT'" (click)="publishTrip(trip.id)" class="publish-btn">
+              <mat-icon>publish</mat-icon> Publish
+            </button>
+            <button (click)="router.navigate(['/trips', trip.slug])" class="view-btn">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-trips" *ngIf="!isLoading && trips.length === 0">
+        <mat-icon>add_circle_outline</mat-icon>
+        <h3>No trips yet</h3>
+        <p>Create your first trip to start accepting bookings</p>
+        <button (click)="router.navigate(['/organizer/create-trip'])" class="create-btn">
+          Create First Trip
+        </button>
+      </div>
+    </div>
+
+    <!-- AI Assistant -->
+    <div class="ai-section" *ngIf="organizerProfile?.isVerified">
+      <div class="ai-card">
+        <div class="ai-icon"><mat-icon>smart_toy</mat-icon></div>
+        <div>
+          <h3>Plan with Yatri Pro AI</h3>
+          <p>Let AI help you create amazing itineraries, suggest pricing, and write compelling trip descriptions</p>
+        </div>
+        <button class="ai-btn">
+          <mat-icon>auto_awesome</mat-icon> Open AI Assistant
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

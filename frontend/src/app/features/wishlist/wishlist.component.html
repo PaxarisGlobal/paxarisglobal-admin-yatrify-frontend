@@ -1,0 +1,73 @@
+<div class="wishlist-page">
+  <div class="page-header">
+    <div class="container">
+      <h1><mat-icon>favorite</mat-icon> My Wishlist</h1>
+      <p>Trips you've saved for later</p>
+    </div>
+  </div>
+
+  <div class="container page-body">
+    <!-- Loading Skeleton -->
+    <div class="trip-grid" *ngIf="isLoading">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="sk-img"></div>
+        <div class="sk-content">
+          <div class="sk-line w60"></div>
+          <div class="sk-line w80"></div>
+          <div class="sk-line w40"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wishlist Items -->
+    <div class="trip-grid" *ngIf="!isLoading && wishlistItems.length">
+      <div class="wishlist-card" *ngFor="let item of wishlistItems">
+        <button class="remove-btn" (click)="removeFromWishlist(item.trip?.id)" title="Remove from wishlist">
+          <mat-icon>favorite</mat-icon>
+        </button>
+
+        <div class="card-image" (click)="viewTrip(item.trip?.slug)">
+          <img [src]="item.trip?.coverImageUrl || 'assets/images/trip-placeholder.jpg'"
+               [alt]="item.trip?.title">
+          <span class="trip-type-badge">{{ item.trip?.tripType }}</span>
+        </div>
+
+        <div class="card-body">
+          <h3 (click)="viewTrip(item.trip?.slug)">{{ item.trip?.title }}</h3>
+          <p class="destination">
+            <mat-icon>location_on</mat-icon>
+            {{ item.trip?.destinations?.join(', ') }}
+          </p>
+          <p class="duration">
+            <mat-icon>schedule</mat-icon>
+            {{ item.trip?.durationDays }}D / {{ item.trip?.durationNights }}N
+          </p>
+          <div class="card-footer">
+            <div class="price">
+              <span class="from">from</span>
+              <strong>₹{{ item.trip?.pricePerPerson | number }}</strong>
+              <span class="per">/ person</span>
+            </div>
+            <div class="seats-info" *ngIf="item.trip?.availableSeats <= 10 && item.trip?.availableSeats > 0">
+              <span class="urgency">Only {{ item.trip?.availableSeats }} seats left!</span>
+            </div>
+          </div>
+          <button class="book-btn" (click)="bookNow(item.trip?.slug)">
+            Book Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && !wishlistItems.length">
+      <img src="assets/images/empty-wishlist.svg" alt="Empty wishlist" onerror="this.style.display='none'">
+      <mat-icon class="empty-icon">favorite_border</mat-icon>
+      <h2>Your wishlist is empty</h2>
+      <p>Save trips you're interested in by clicking the heart icon on any trip card.</p>
+      <button class="explore-btn" routerLink="/trips">
+        <mat-icon>explore</mat-icon> Explore Trips
+      </button>
+    </div>
+  </div>
+</div>

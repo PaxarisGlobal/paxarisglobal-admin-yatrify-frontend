@@ -1,0 +1,107 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div class="container">
+      <div class="user-welcome">
+        <div class="avatar">
+          <img *ngIf="userProfile?.profilePictureUrl" [src]="userProfile!.profilePictureUrl" alt="">
+          <span *ngIf="!userProfile?.profilePictureUrl">{{ userProfile?.firstName?.charAt(0) || 'U' }}</span>
+        </div>
+        <div>
+          <h1>Welcome back, {{ userProfile?.firstName }}! 👋</h1>
+          <p>Here's an overview of your trips and account</p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat"><strong>{{ bookings.length }}</strong><span>Total Bookings</span></div>
+        <div class="stat"><strong>{{ bookings | countBy:'CONFIRMED' }}</strong><span>Confirmed</span></div>
+        <div class="stat"><strong>{{ bookings | countBy:'COMPLETED' }}</strong><span>Completed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container dashboard-body">
+    <mat-tab-group [(selectedIndex)]="activeTab">
+      <mat-tab label="My Bookings">
+        <div class="tab-panel">
+          <div class="bookings-grid" *ngIf="!isLoading">
+            <div *ngFor="let booking of bookings" class="booking-card">
+              <div class="booking-image">
+                <img [src]="booking.trip?.coverImageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'" [alt]="booking.trip?.title">
+                <div class="status-chip" [class]="booking.status.toLowerCase()">
+                  {{ booking.status }}
+                </div>
+              </div>
+              <div class="booking-info">
+                <h4>{{ booking.trip?.title }}</h4>
+                <div class="booking-meta">
+                  <span><mat-icon>calendar_today</mat-icon> {{ booking.trip?.startDate | date:'dd MMM yyyy' }}</span>
+                  <span><mat-icon>groups</mat-icon> {{ booking.totalTravelers }} travelers</span>
+                </div>
+                <div class="booking-ref">Ref: {{ booking.bookingReference }}</div>
+                <div class="booking-footer">
+                  <div class="amount">₹{{ booking.totalAmount | number:'1.0-0' }}</div>
+                  <div class="actions">
+                    <button *ngIf="booking.status === 'CONFIRMED' || booking.status === 'PENDING'"
+                            (click)="cancelBooking(booking.id)"
+                            class="cancel-btn">
+                      Cancel
+                    </button>
+                    <button (click)="router.navigate(['/booking/confirmation', booking.bookingReference])"
+                            class="view-btn">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-bookings" *ngIf="!isLoading && bookings.length === 0">
+            <mat-icon>luggage</mat-icon>
+            <h3>No bookings yet</h3>
+            <p>Start exploring amazing trips and make your first booking!</p>
+            <button (click)="router.navigate(['/trips'])" class="explore-btn">
+              <mat-icon>explore</mat-icon> Explore Trips
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Account Info">
+        <div class="tab-panel">
+          <div class="profile-card">
+            <h3>Personal Information</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Full Name</label>
+                <span>{{ userProfile?.fullName || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Email</label>
+                <span>{{ userProfile?.email || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Phone</label>
+                <span>{{ userProfile?.phone || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <label>City</label>
+                <span>{{ userProfile?.city || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Verification</label>
+                <span class="verification-status" [class]="userProfile?.verificationStatus?.toLowerCase() || 'pending'">
+                  {{ userProfile?.verificationStatus || 'PENDING' }}
+                </span>
+              </div>
+            </div>
+            <button (click)="router.navigate(['/profile'])" class="edit-btn">
+              <mat-icon>edit</mat-icon> Edit Profile
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

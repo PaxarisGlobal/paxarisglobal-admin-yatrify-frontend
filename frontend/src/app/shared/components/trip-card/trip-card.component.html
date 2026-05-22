@@ -1,0 +1,79 @@
+<div class="trip-card" (click)="navigate()">
+  <div class="trip-card__image">
+    <img [src]="trip.coverImageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=70'"
+         [alt]="trip.title"
+         loading="lazy">
+
+    <!-- Badges -->
+    <span class="trip-card__badge type-badge">
+      {{ tripTypeConfig.emoji }} {{ tripTypeConfig.label }}
+    </span>
+
+    <div class="trip-card__top-right">
+      <span class="discount-badge" *ngIf="trip.discountPercentage > 0">
+        {{ trip.discountPercentage }}% OFF
+      </span>
+      <span class="featured-badge" *ngIf="trip.isFeatured">⭐ Featured</span>
+    </div>
+
+    <!-- Seats Warning -->
+    <span class="seats-badge" *ngIf="seatsLeft">
+      🔥 {{ seatsLeft }}
+    </span>
+
+    <!-- Wishlist -->
+    <button class="wishlist-btn" (click)="$event.stopPropagation()">
+      <mat-icon [class.wishlisted]="trip.isWishlisted">
+        {{ trip.isWishlisted ? 'favorite' : 'favorite_border' }}
+      </mat-icon>
+    </button>
+  </div>
+
+  <div class="trip-card__body">
+    <div class="trip-card__meta-top">
+      <div class="destination">
+        <mat-icon>location_on</mat-icon>
+        {{ trip.destinations.slice(0, 2).join(' → ') }}
+      </div>
+      <div class="duration">{{ durationLabel }}</div>
+    </div>
+
+    <h3 class="trip-card__title">{{ trip.title }}</h3>
+
+    <div class="trip-card__details">
+      <div class="detail-item">
+        <mat-icon>calendar_today</mat-icon>
+        {{ trip.startDate | date:'dd MMM yyyy' }}
+      </div>
+      <div class="detail-item" *ngIf="trip.departureCity">
+        <mat-icon>flight_takeoff</mat-icon>
+        {{ trip.departureCity }}
+      </div>
+    </div>
+
+    <!-- Rating & Reviews -->
+    <div class="trip-card__footer">
+      <div class="price">
+        <span class="price-from">Starting from</span>
+        <div class="price-amount">
+          <span class="original-price" *ngIf="trip.discountPercentage > 0">
+            {{ formatPrice(trip.pricePerPerson) }}
+          </span>
+          {{ formatPrice(discountedPrice) }}
+          <span class="per-person">/ person</span>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="rating" *ngIf="trip.rating > 0">
+          <mat-icon>star</mat-icon>
+          <span>{{ trip.rating | number:'1.1-1' }}</span>
+          <span class="reviews">({{ trip.totalReviews }})</span>
+        </div>
+        <div class="organizer-verified" *ngIf="trip.organizer?.isVerified">
+          <mat-icon>verified</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

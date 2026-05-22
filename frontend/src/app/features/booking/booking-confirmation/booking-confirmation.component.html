@@ -1,0 +1,63 @@
+<div class="confirmation-page">
+  <div class="container" *ngIf="booking">
+    <div class="success-header">
+      <div class="success-icon"><mat-icon>check_circle</mat-icon></div>
+      <h1>Booking Confirmed! 🎉</h1>
+      <p>Your booking has been confirmed. Get ready for an amazing trip!</p>
+      <div class="booking-ref">Booking Reference: <strong>{{ booking.bookingReference }}</strong></div>
+    </div>
+
+    <div class="confirmation-card">
+      <div class="trip-info">
+        <img [src]="booking.trip?.coverImageUrl" [alt]="booking.trip?.title">
+        <div>
+          <h3>{{ booking.trip?.title }}</h3>
+          <div class="trip-details">
+            <span><mat-icon>calendar_today</mat-icon> {{ booking.trip?.startDate | date:'dd MMM' }} - {{ booking.trip?.endDate | date:'dd MMM yyyy' }}</span>
+            <span><mat-icon>location_on</mat-icon> {{ booking.trip?.destinations?.join(', ') }}</span>
+            <span><mat-icon>groups</mat-icon> {{ booking.totalTravelers }} traveler(s)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-summary">
+        <h4>Payment Summary</h4>
+        <div class="amount-row">
+          <span>Total Paid</span>
+          <strong class="amount">₹{{ booking.amountPaid | number:'1.0-0' }}</strong>
+        </div>
+        <div class="status-badge confirmed"><mat-icon>check_circle</mat-icon> CONFIRMED</div>
+      </div>
+    </div>
+
+    <div class="next-steps">
+      <h3>What's Next?</h3>
+      <div class="steps-grid">
+        <div class="step-card">
+          <mat-icon>email</mat-icon>
+          <h4>Check Your Email</h4>
+          <p>A detailed confirmation with your booking tickets has been sent to your registered email.</p>
+        </div>
+        <div class="step-card">
+          <mat-icon>description</mat-icon>
+          <h4>Prepare Documents</h4>
+          <p>Keep your Aadhaar/Passport ready. Check the organizer's document requirements.</p>
+        </div>
+        <div class="step-card">
+          <mat-icon>luggage</mat-icon>
+          <h4>Pack Your Bags</h4>
+          <p>Review the itinerary and packing list. Our AI assistant Yatri can help with suggestions!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button (click)="router.navigate(['/dashboard/bookings'])" class="btn-secondary">
+        <mat-icon>list_alt</mat-icon> View All Bookings
+      </button>
+      <button (click)="router.navigate(['/trips'])" class="btn-primary">
+        <mat-icon>explore</mat-icon> Explore More Trips
+      </button>
+    </div>
+  </div>
+</div>

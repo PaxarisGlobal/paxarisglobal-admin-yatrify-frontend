@@ -1,0 +1,221 @@
+.footer {
+  background: #1a1a2e;
+  color: rgba(255, 255, 255, 0.8);
+
+  &__top {
+    padding: 64px 0 40px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+    gap: 48px;
+
+    @media (max-width: 1100px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__brand {
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+
+      .logo-icon {
+        font-size: 24px;
+        color: var(--primary);
+      }
+
+      .logo-text {
+        font-size: 24px;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    .brand-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 24px;
+    }
+  }
+
+  .social-links {
+    display: flex;
+    gap: 10px;
+
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      mat-icon { font-size: 18px; }
+      svg { fill: currentColor; }
+
+      &:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  &__col {
+    h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      li a {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-block;
+
+        &:hover {
+          color: var(--primary-light);
+          transform: translateX(4px);
+        }
+      }
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 12px;
+
+      mat-icon {
+        font-size: 18px;
+        color: var(--primary-light);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+    }
+
+    .app-badges {
+      margin-top: 20px;
+
+      h5 {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+      }
+
+      .badges {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .badge-btn {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 16px;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 0.2s;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.15);
+          }
+
+          mat-icon {
+            font-size: 22px;
+            color: white;
+          }
+
+          div {
+            display: flex;
+            flex-direction: column;
+
+            .small {
+              font-size: 10px;
+              color: rgba(255, 255, 255, 0.5);
+            }
+
+            span:last-child {
+              font-size: 14px;
+              font-weight: 600;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+
+    &-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    .payment-methods {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+
+      .payment-icon {
+        padding: 4px 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+}

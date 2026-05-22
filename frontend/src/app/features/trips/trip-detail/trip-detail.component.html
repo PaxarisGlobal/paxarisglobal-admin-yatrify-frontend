@@ -1,0 +1,264 @@
+<div class="trip-detail" *ngIf="!isLoading && trip">
+  <!-- Hero Image -->
+  <div class="trip-hero" [style.backgroundImage]="'url(' + (trip.coverImageUrl || '') + ')'">
+    <div class="trip-hero__overlay"></div>
+    <div class="container trip-hero__content">
+      <div class="breadcrumb">
+        <a routerLink="/">Home</a>
+        <mat-icon>chevron_right</mat-icon>
+        <a routerLink="/trips">Trips</a>
+        <mat-icon>chevron_right</mat-icon>
+        <span>{{ trip.title }}</span>
+      </div>
+      <div class="trip-badges">
+        <span class="badge-item">{{ trip.tripType }}</span>
+        <span class="badge-item verified" *ngIf="trip.organizer?.isVerified">✓ Verified Organizer</span>
+        <span class="badge-item trending" *ngIf="trip.isTrending">🔥 Trending</span>
+      </div>
+      <h1>{{ trip.title }}</h1>
+      <div class="trip-meta">
+        <span><mat-icon>location_on</mat-icon> {{ trip.destinations.join(' → ') }}</span>
+        <span><mat-icon>schedule</mat-icon> {{ trip.durationDays }}D / {{ trip.durationNights }}N</span>
+        <span><mat-icon>calendar_today</mat-icon> {{ trip.startDate | date:'dd MMM yyyy' }}</span>
+        <span *ngIf="trip.rating > 0"><mat-icon>star</mat-icon> {{ trip.rating | number:'1.1-1' }} ({{ trip.totalReviews }} reviews)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container trip-main">
+    <div class="trip-layout">
+      <!-- Left: Details -->
+      <div class="trip-details">
+        <!-- Quick Info -->
+        <div class="quick-info-grid">
+          <div class="info-item">
+            <mat-icon>flight_takeoff</mat-icon>
+            <div><strong>Departure</strong><span>{{ trip.departureCity || 'Multiple cities' }}</span></div>
+          </div>
+          <div class="info-item">
+            <mat-icon>event_seat</mat-icon>
+            <div>
+              <strong>Seats</strong>
+              <span [class.text-error]="trip.availableSeats <= 5">{{ trip.availableSeats }} left of {{ trip.totalSeats }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <mat-icon>language</mat-icon>
+            <div><strong>Languages</strong><span>{{ trip.languagesSpoken?.join(', ') }}</span></div>
+          </div>
+          <div class="info-item">
+            <mat-icon>signal_cellular_alt</mat-icon>
+            <div><strong>Difficulty</strong><span>{{ trip.difficultyLevel }}</span></div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <mat-tab-group [(selectedIndex)]="selectedTab" class="detail-tabs">
+          <!-- Overview -->
+          <mat-tab label="Overview">
+            <div class="tab-content">
+              <h3>About This Trip</h3>
+              <p>{{ trip.description }}</p>
+
+              <h3>Highlights</h3>
+              <ul class="highlights-list">
+                <li *ngFor="let h of trip.highlights">
+                  <mat-icon>check_circle</mat-icon> {{ h }}
+                </li>
+              </ul>
+            </div>
+          </mat-tab>
+
+          <!-- Itinerary -->
+          <mat-tab label="Day-by-Day Plan">
+            <div class="tab-content">
+              <div *ngFor="let day of trip.itineraries" class="itinerary-day">
+                <div class="day-header">
+                  <div class="day-number">Day {{ day.dayNumber }}</div>
+                  <div class="day-info">
+                    <h4>{{ day.title }}</h4>
+                  </div>
+                </div>
+                <div class="day-body">
+                  <p>{{ day.description }}</p>
+                  <div class="activities" *ngIf="day.activities?.length">
+                    <strong>Activities:</strong>
+                    <ul>
+                      <li *ngFor="let a of day.activities">{{ a }}</li>
+                    </ul>
+                  </div>
+                  <div class="day-meta">
+                    <span *ngIf="day.accommodation"><mat-icon>hotel</mat-icon> {{ day.accommodation }}</span>
+                    <span *ngIf="day.transport"><mat-icon>directions_bus</mat-icon> {{ day.transport }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Inclusions -->
+          <mat-tab label="What's Included">
+            <div class="tab-content inc-exc">
+              <div class="inclusions">
+                <h4><mat-icon>check_circle</mat-icon> Included</h4>
+                <ul>
+                  <li *ngFor="let inc of trip.inclusions">{{ inc }}</li>
+                </ul>
+              </div>
+              <div class="exclusions">
+                <h4><mat-icon>cancel</mat-icon> Not Included</h4>
+                <ul>
+                  <li *ngFor="let exc of trip.exclusions">{{ exc }}</li>
+                </ul>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Hotels -->
+          <mat-tab label="Hotels" *ngIf="trip.hotels?.length">
+            <div class="tab-content">
+              <div *ngFor="let hotel of trip.hotels" class="hotel-card">
+                <div class="hotel-info">
+                  <div class="stars">
+                    <mat-icon *ngFor="let s of [].constructor(hotel.starRating || 3)">star</mat-icon>
+                  </div>
+                  <h4>{{ hotel.hotelName }}</h4>
+                  <p>{{ hotel.city }} • {{ hotel.roomType }}</p>
+                  <span>Day {{ hotel.checkInDay }} - Day {{ hotel.checkOutDay }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Policy -->
+          <mat-tab label="Policies">
+            <div class="tab-content">
+              <h4>Cancellation Policy</h4>
+              <p>{{ trip.cancellationPolicy }}</p>
+              <h4>Terms & Conditions</h4>
+              <p>{{ trip.termsAndConditions }}</p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <!-- Booking Sidebar -->
+      <aside class="booking-sidebar">
+        <div class="booking-card">
+          <div class="price-display">
+            <div class="price-main">
+              <span class="currency">₹</span>
+              <span class="amount">{{ (effectivePrice | number:'1.0-0') }}</span>
+              <span class="per-person">/person</span>
+            </div>
+            <div class="original" *ngIf="trip.discountPercentage > 0">
+              <span class="strike">{{ formatPrice(trip.pricePerPerson) }}</span>
+              <span class="discount-tag">{{ trip.discountPercentage }}% OFF</span>
+            </div>
+            <p class="gst-note">+ {{ trip.gstPercentage }}% GST</p>
+          </div>
+
+          <!-- Travelers Counter -->
+          <div class="traveler-section">
+            <div class="traveler-row">
+              <div class="traveler-label">
+                <strong>Adults</strong>
+                <span>Age 12+</span>
+              </div>
+              <div class="counter">
+                <button (click)="numAdults = Math.max(1, numAdults - 1)"><mat-icon>remove</mat-icon></button>
+                <span>{{ numAdults }}</span>
+                <button (click)="numAdults = numAdults + 1" [disabled]="numAdults + numChildren >= trip.availableSeats">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="traveler-row">
+              <div class="traveler-label">
+                <strong>Children</strong>
+                <span>Age 2-12</span>
+              </div>
+              <div class="counter">
+                <button (click)="numChildren = Math.max(0, numChildren - 1)"><mat-icon>remove</mat-icon></button>
+                <span>{{ numChildren }}</span>
+                <button (click)="numChildren = numChildren + 1" [disabled]="numAdults + numChildren >= trip.availableSeats">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price Summary -->
+          <div class="price-summary">
+            <div class="summary-row">
+              <span>{{ numAdults }} Adult{{ numAdults > 1 ? 's' : '' }}</span>
+              <span>{{ formatPrice(effectivePrice * numAdults) }}</span>
+            </div>
+            <div class="summary-row" *ngIf="numChildren > 0">
+              <span>{{ numChildren }} Child{{ numChildren > 1 ? 'ren' : '' }}</span>
+              <span>{{ formatPrice((trip.childPrice || effectivePrice * 0.7) * numChildren) }}</span>
+            </div>
+            <div class="summary-total">
+              <strong>Estimated Total</strong>
+              <strong class="total-amount">{{ formatPrice(totalPrice) }}</strong>
+            </div>
+          </div>
+
+          <!-- Deadline Warning -->
+          <div class="deadline-warning" *ngIf="trip.registrationDeadline">
+            <mat-icon>timer</mat-icon>
+            Book before {{ trip.registrationDeadline | date:'dd MMM yyyy' }}
+          </div>
+
+          <button class="book-btn"
+                  [disabled]="!trip.isAvailable"
+                  (click)="bookNow()">
+            <mat-icon>confirmation_number</mat-icon>
+            {{ trip.isAvailable ? 'Book This Trip' : 'Sold Out' }}
+          </button>
+
+          <button class="share-btn" (click)="shareTrip()">
+            <mat-icon>share</mat-icon> Share Trip
+          </button>
+        </div>
+
+        <!-- Organizer Info -->
+        <div class="organizer-card" *ngIf="trip.organizer">
+          <h4>About the Organizer</h4>
+          <div class="org-info">
+            <div class="org-avatar">
+              <img *ngIf="trip.organizer.logoUrl" [src]="trip.organizer.logoUrl" [alt]="trip.organizer.organizationName">
+              <mat-icon *ngIf="!trip.organizer.logoUrl">business</mat-icon>
+            </div>
+            <div>
+              <strong>{{ trip.organizer.organizationName }}</strong>
+              <div class="org-stats">
+                <span *ngIf="trip.organizer.isVerified" class="verified-badge">
+                  <mat-icon>verified</mat-icon> Verified
+                </span>
+                <span *ngIf="trip.organizer.rating > 0">
+                  <mat-icon>star</mat-icon> {{ trip.organizer.rating | number:'1.1-1' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading-state" *ngIf="isLoading">
+  <div class="container">
+    <div class="skeleton" style="height: 400px; border-radius: 0; margin-bottom: 32px;"></div>
+    <div style="display: grid; grid-template-columns: 1fr 320px; gap: 32px;">
+      <div>
+        <div class="skeleton" style="height: 200px; border-radius: 16px; margin-bottom: 16px;"></div>
+        <div class="skeleton" style="height: 400px; border-radius: 16px;"></div>
+      </div>
+      <div class="skeleton" style="height: 500px; border-radius: 16px;"></div>
+    </div>
+  </div>
+</div>

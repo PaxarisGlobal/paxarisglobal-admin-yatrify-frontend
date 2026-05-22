@@ -1,0 +1,316 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 72px;
+  overflow: hidden;
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+
+    &.active { opacity: 1; }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(15, 15, 35, 0.85) 0%,
+      rgba(15, 15, 35, 0.6) 50%,
+      rgba(15, 15, 35, 0.4) 100%
+    );
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 80px;
+    padding-bottom: 160px;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    width: fit-content;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.6s ease;
+  }
+
+  &__title {
+    font-size: 62px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 700px;
+    animation: fadeInUp 0.6s ease 0.1s both;
+
+    span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (max-width: 1024px) { font-size: 48px; }
+    @media (max-width: 768px) { font-size: 36px; }
+    @media (max-width: 480px) { font-size: 30px; }
+  }
+
+  &__subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    animation: fadeInUp 0.6s ease 0.2s both;
+
+    @media (max-width: 768px) { font-size: 16px; }
+  }
+
+  &__stats {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 24px 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Search Box
+.search-box {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  padding: 8px;
+  max-width: 860px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.6s ease 0.3s both;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  .search-form {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+
+    @media (max-width: 768px) {
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+    }
+  }
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    padding: 14px 18px;
+    min-width: 0;
+
+    mat-icon {
+      color: var(--primary);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    input, select {
+      border: none;
+      outline: none;
+      font-family: var(--font-primary);
+      font-size: 15px;
+      color: var(--text-primary);
+      width: 100%;
+      background: transparent;
+      cursor: pointer;
+
+      &::placeholder { color: var(--text-light); }
+    }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      flex: 1 1 calc(50% - 8px);
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--bg-light);
+    }
+  }
+
+  .search-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border-color);
+    flex-shrink: 0;
+
+    @media (max-width: 768px) { display: none; }
+  }
+
+  .search-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    margin: 4px;
+    box-shadow: var(--shadow-primary);
+
+    mat-icon { font-size: 20px; }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(227, 91, 42, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      justify-content: center;
+      margin: 4px 0 0;
+    }
+  }
+}
+
+.popular-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 4px;
+  flex-wrap: wrap;
+
+  .popular-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .tag {
+    padding: 4px 12px;
+    background: var(--bg-gray);
+    border: none;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-primary);
+
+    &:hover {
+      background: var(--primary-bg);
+      color: var(--primary);
+    }
+  }
+}
+
+.slider-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 32px;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+
+    &.active {
+      width: 28px;
+      background: white;
+    }
+  }
+}
+
+// Stats
+.stats-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 36px;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+
+      strong {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      span {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 8px 20px;
+    }
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border-color);
+
+    @media (max-width: 600px) { display: none; }
+  }
+}

@@ -1,0 +1,217 @@
+<div class="booking-page">
+  <div class="booking-header">
+    <div class="container">
+      <div class="back-nav">
+        <button (click)="router.navigate(['/trips'])">
+          <mat-icon>arrow_back</mat-icon> Back to Trips
+        </button>
+      </div>
+      <h1>Complete Your Booking</h1>
+    </div>
+  </div>
+
+  <div class="container booking-body" *ngIf="trip && !isLoading">
+    <div class="booking-layout">
+      <!-- Main Form -->
+      <div class="booking-main">
+        <!-- Step Indicator -->
+        <div class="steps-indicator">
+          <div class="step" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">
+            <div class="step-circle">
+              <mat-icon *ngIf="currentStep > 1">check</mat-icon>
+              <span *ngIf="currentStep <= 1">1</span>
+            </div>
+            <span>Travelers</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" [class.active]="currentStep >= 2" [class.done]="currentStep > 2">
+            <div class="step-circle">
+              <mat-icon *ngIf="currentStep > 2">check</mat-icon>
+              <span *ngIf="currentStep <= 2">2</span>
+            </div>
+            <span>Review</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" [class.active]="currentStep >= 3">
+            <div class="step-circle"><span>3</span></div>
+            <span>Payment</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Traveler Details -->
+        <div class="step-content" *ngIf="currentStep === 1">
+          <h3>Enter Traveler Details</h3>
+          <form [formGroup]="travelerForm">
+            <div formArrayName="travelers">
+              <div *ngFor="let traveler of travelersArray.controls; let i = index"
+                   [formGroupName]="i"
+                   class="traveler-form">
+                <div class="traveler-header">
+                  <mat-icon>person</mat-icon>
+                  <span>{{ i < numAdults ? 'Adult ' + (i + 1) : 'Child ' + (i - numAdults + 1) }}</span>
+                  <span class="traveler-type-badge">{{ traveler.get('travelerType')?.value }}</span>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>First Name *</label>
+                    <input formControlName="firstName" type="text" placeholder="As per ID card" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input formControlName="lastName" type="text" placeholder="Last name" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input formControlName="dateOfBirth" type="date" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label>Gender</label>
+                    <select formControlName="gender" class="form-control">
+                      <option value="MALE">Male</option>
+                      <option value="FEMALE">Female</option>
+                      <option value="OTHER">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row" *ngIf="traveler.get('travelerType')?.value === 'ADULT'">
+                  <div class="form-group">
+                    <label>ID Type</label>
+                    <select formControlName="idType" class="form-control">
+                      <option value="AADHAAR">Aadhaar Card</option>
+                      <option value="PAN">PAN Card</option>
+                      <option value="PASSPORT">Passport</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>ID Number</label>
+                    <input formControlName="idNumber" type="text" placeholder="Document number" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Dietary Preference</label>
+                  <select formControlName="dietaryPreference" class="form-control">
+                    <option value="VEG">Vegetarian</option>
+                    <option value="NON_VEG">Non-Vegetarian</option>
+                    <option value="JAIN">Jain</option>
+                    <option value="VEGAN">Vegan</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="step-actions">
+            <button class="btn-primary" (click)="currentStep = 2" [disabled]="travelerForm.invalid">
+              Continue to Review <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Review -->
+        <div class="step-content" *ngIf="currentStep === 2">
+          <h3>Review Your Booking</h3>
+          <div class="review-section">
+            <h4>Trip Details</h4>
+            <div class="review-trip">
+              <img [src]="trip.coverImageUrl" [alt]="trip.title">
+              <div>
+                <h5>{{ trip.title }}</h5>
+                <p>{{ trip.startDate | date:'dd MMM' }} - {{ trip.endDate | date:'dd MMM yyyy' }}</p>
+                <p>{{ trip.durationDays }} Days | Departure: {{ trip.departureCity }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-section">
+            <h4>Travelers ({{ numAdults + numChildren }})</h4>
+            <div *ngFor="let t of travelersArray.value" class="traveler-summary">
+              <mat-icon>person</mat-icon>
+              {{ t.firstName }} {{ t.lastName }} — {{ t.travelerType | titlecase }}
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-secondary" (click)="currentStep = 1">
+              <mat-icon>arrow_back</mat-icon> Edit Details
+            </button>
+            <button class="btn-primary" (click)="currentStep = 3">
+              Proceed to Payment <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Payment -->
+        <div class="step-content" *ngIf="currentStep === 3">
+          <h3>Secure Payment</h3>
+          <div class="payment-info">
+            <mat-icon>lock</mat-icon>
+            <p>Your payment is processed securely via Razorpay. We never store your card details.</p>
+          </div>
+
+          <div class="payment-methods">
+            <div class="method active"><mat-icon>phone_android</mat-icon> UPI / QR Code</div>
+            <div class="method"><mat-icon>credit_card</mat-icon> Credit / Debit Card</div>
+            <div class="method"><mat-icon>account_balance</mat-icon> Net Banking</div>
+            <div class="method"><mat-icon>account_balance_wallet</mat-icon> Wallets</div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-secondary" (click)="currentStep = 2">
+              <mat-icon>arrow_back</mat-icon> Back
+            </button>
+            <button class="btn-primary pay-btn" (click)="confirmAndPay()" [disabled]="isSubmitting">
+              <mat-icon>payment</mat-icon>
+              {{ isSubmitting ? 'Processing...' : 'Pay ' + formatPrice(totalAmount) }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Summary Sidebar -->
+      <aside class="booking-summary">
+        <h3>Booking Summary</h3>
+        <div class="trip-mini">
+          <img [src]="trip.coverImageUrl" [alt]="trip.title">
+          <div>
+            <strong>{{ trip.title }}</strong>
+            <span>{{ trip.startDate | date:'dd MMM yyyy' }}</span>
+          </div>
+        </div>
+
+        <div class="summary-items">
+          <div class="summary-item">
+            <span>{{ numAdults }} Adult{{ numAdults > 1 ? 's' : '' }}</span>
+            <span>{{ formatPrice(trip.pricePerPerson * numAdults) }}</span>
+          </div>
+          <div class="summary-item" *ngIf="numChildren > 0">
+            <span>{{ numChildren }} Child{{ numChildren > 1 ? 'ren' : '' }}</span>
+            <span>{{ formatPrice((trip.childPrice || trip.pricePerPerson * 0.7) * numChildren) }}</span>
+          </div>
+          <div class="summary-item discount" *ngIf="trip.discountPercentage > 0">
+            <span>Discount ({{ trip.discountPercentage }}%)</span>
+            <span class="text-success">- {{ formatPrice(totalAmount * trip.discountPercentage / 100) }}</span>
+          </div>
+          <div class="summary-item">
+            <span>GST ({{ trip.gstPercentage }}%)</span>
+            <span>{{ formatPrice(totalAmount * trip.gstPercentage / 100) }}</span>
+          </div>
+          <div class="summary-total">
+            <strong>Total Amount</strong>
+            <strong>{{ formatPrice(totalAmount) }}</strong>
+          </div>
+        </div>
+
+        <div class="cancellation-note">
+          <mat-icon>info</mat-icon>
+          <span>Free cancellation up to 7 days before departure</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

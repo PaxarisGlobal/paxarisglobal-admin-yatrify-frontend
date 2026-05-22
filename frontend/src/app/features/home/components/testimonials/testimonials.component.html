@@ -1,0 +1,31 @@
+<section class="testimonials section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">💬 Traveler Stories</span>
+      <h2>What Our <span>Travelers</span> Say</h2>
+      <p>Real experiences from real people who've traveled with Yatrify</p>
+    </div>
+
+    <div class="testimonials__grid">
+      <div *ngFor="let testimonial of TESTIMONIALS" class="testimonial-card">
+        <div class="quote-icon">❝</div>
+        <p class="review">{{ testimonial.review }}</p>
+        <div class="stars">
+          <mat-icon *ngFor="let s of [1,2,3,4,5]">star</mat-icon>
+        </div>
+        <div class="reviewer">
+          <div class="avatar" [style.background]="testimonial.color">
+            {{ testimonial.avatar }}
+          </div>
+          <div class="info">
+            <strong>{{ testimonial.name }}</strong>
+            <span>{{ testimonial.trip }}</span>
+            <span class="location">
+              <mat-icon>location_on</mat-icon> {{ testimonial.location }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

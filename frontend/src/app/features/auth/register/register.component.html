@@ -1,0 +1,74 @@
+<div class="auth-page">
+  <div class="auth-visual">
+    <div class="visual-overlay"></div>
+    <div class="visual-content">
+      <div class="brand-logo">✈ Yatrify</div>
+      <h2>Start Your Journey Today</h2>
+      <p>Create your account and discover thousands of curated trips across India</p>
+    </div>
+  </div>
+
+  <div class="auth-form-section">
+    <div class="auth-card">
+      <h2>Create Account</h2>
+      <p class="subtitle">Join the Yatrify community — it's free!</p>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <div class="name-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <div class="input-wrap">
+              <mat-icon>person</mat-icon>
+              <input type="text" formControlName="firstName" placeholder="First name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <div class="input-wrap">
+              <mat-icon>person_outline</mat-icon>
+              <input type="text" formControlName="lastName" placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address *</label>
+          <div class="input-wrap">
+            <mat-icon>email</mat-icon>
+            <input type="email" formControlName="email" placeholder="your@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number *</label>
+          <div class="input-wrap">
+            <mat-icon>phone</mat-icon>
+            <input type="tel" formControlName="phone" placeholder="+91 98765 43210">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password *</label>
+          <div class="input-wrap">
+            <mat-icon>lock</mat-icon>
+            <input type="password" formControlName="password" placeholder="Minimum 8 characters">
+          </div>
+        </div>
+
+        <div class="terms-check">
+          <p>By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+        </div>
+
+        <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <button type="submit" class="submit-btn" [disabled]="registerForm.invalid || isLoading">
+          {{ isLoading ? 'Creating account...' : 'Create My Account' }}
+        </button>
+      </form>
+
+      <p class="switch-auth">
+        Already have an account? <a routerLink="/auth/login">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
