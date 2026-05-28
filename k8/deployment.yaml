@@ -16,7 +16,7 @@
                                                 - name: dockerhub-secret
                                             containers:
                                                 - name: paxarisglobal-admin-yatrify-frontend
-                                                    image: devopspaxarisglobalrepo/paxarisglobal-admin-yatrify-frontend:a86a43f95d0e54548b2d6afcc8480eb5aabf055e
+                                                    image: "devopspaxarisglobalrepo/paxarisglobal-admin-yatrify-frontend:latest"
                                                     imagePullPolicy: Always
                                                     ports:
                                                         - containerPort: 80
@@ -31,5 +31,5 @@
                                     ports:
                                         - port: 80
                                             targetPort: 80
-            nodePort: 0
+            nodePort: 30583
                                     type: NodePort
